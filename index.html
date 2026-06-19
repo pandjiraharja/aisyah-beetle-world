@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🪲 Aisyah's Beetle World - Aurora Ecosystem Simulator</title>
+    <title>🪲 Aisyah's 3D Beetle World - Realistic Ecosystem</title>
     <style>
         * {
             margin: 0;
@@ -18,64 +18,162 @@
             color: white;
         }
 
-        /* Aurora Background */
-        .aurora-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at 50% 0%, rgba(0, 255, 136, 0.1), transparent 50%),
-                        radial-gradient(ellipse at 0% 50%, rgba(0, 136, 255, 0.1), transparent 50%),
-                        radial-gradient(ellipse at 100% 50%, rgba(136, 0, 255, 0.1), transparent 50%);
-            animation: auroraShift 8s ease-in-out infinite;
-            z-index: 1;
-        }
-
-        @keyframes auroraShift {
-            0%, 100% {
-                background: radial-gradient(ellipse at 50% 0%, rgba(0, 255, 136, 0.1), transparent 50%),
-                            radial-gradient(ellipse at 0% 50%, rgba(0, 136, 255, 0.1), transparent 50%),
-                            radial-gradient(ellipse at 100% 50%, rgba(136, 0, 255, 0.1), transparent 50%);
-            }
-            50% {
-                background: radial-gradient(ellipse at 50% 0%, rgba(0, 200, 255, 0.15), transparent 50%),
-                            radial-gradient(ellipse at 0% 50%, rgba(100, 200, 255, 0.15), transparent 50%),
-                            radial-gradient(ellipse at 100% 50%, rgba(0, 255, 200, 0.15), transparent 50%);
-            }
-        }
-
-        /* Stars */
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-        }
-
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        /* Canvas Container */
         #canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 3;
             display: block;
+            width: 100%;
+            height: 100vh;
+        }
+
+        /* UI Panel */
+        .ui-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(10, 14, 39, 0.95);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 100;
+            min-width: 280px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            animation: panelFadeIn 0.8s ease-out;
+        }
+
+        @keyframes panelFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ui-panel h2 {
+            color: #00ff88;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 5px;
+            border-left: 3px solid #00ff88;
+        }
+
+        .stat-label {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #00ff88, #00ffff);
+            color: #0a0e27;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.8);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+            animation: headerSlideIn 0.8s ease-out;
+        }
+
+        @keyframes headerSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 2em;
+            color: #00ff88;
+            text-shadow: 0 0 20px #00ff88;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header h1:hover {
+            color: #ff6b9d;
+            text-shadow: 0 0 30px #ff6b9d;
+            transform: scale(1.05);
+        }
+
+        .header p {
+            color: #00ffff;
+            font-size: 0.9em;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        /* Message Button */
+        .message-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff6b9d, #ffd700);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 100;
+            font-size: 1em;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.6);
+            animation: messageBtnPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes messageBtnPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .message-btn:hover {
+            box-shadow: 0 0 30px rgba(255, 107, 157, 0.9);
         }
 
         /* Love Message Modal */
@@ -86,7 +184,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 200;
@@ -161,137 +259,6 @@
             box-shadow: 0 0 25px rgba(0, 255, 136, 0.8);
         }
 
-        /* UI Panel */
-        .ui-panel {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(10, 14, 39, 0.95);
-            border: 2px solid #00ff88;
-            border-radius: 15px;
-            padding: 20px;
-            z-index: 100;
-            min-width: 280px;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
-            animation: panelFadeIn 0.8s ease-out;
-        }
-
-        @keyframes panelFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .ui-panel h2 {
-            color: #00ff88;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            text-shadow: 0 0 10px #00ff88;
-        }
-
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
-            padding: 8px;
-            background: rgba(0, 255, 136, 0.1);
-            border-radius: 5px;
-            border-left: 3px solid #00ff88;
-            animation: statGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes statGlow {
-            0%, 100% { box-shadow: inset 0 0 5px rgba(0, 255, 136, 0.2); }
-            50% { box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.4); }
-        }
-
-        .stat-label {
-            color: #00ff88;
-            font-weight: bold;
-        }
-
-        .stat-value {
-            color: #00ffff;
-            font-weight: bold;
-        }
-
-        /* Control Buttons */
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            background: linear-gradient(135deg, #00ff88, #00ffff);
-            color: #0a0e27;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            font-size: 0.9em;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
-        }
-
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(0, 255, 136, 0.8);
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        /* Header */
-        .header {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            color: white;
-            z-index: 100;
-            animation: headerSlideIn 0.8s ease-out;
-            cursor: pointer;
-        }
-
-        @keyframes headerSlideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .header h1 {
-            font-size: 2em;
-            color: #00ff88;
-            text-shadow: 0 0 20px #00ff88;
-            margin-bottom: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .header h1:hover {
-            color: #ff6b9d;
-            text-shadow: 0 0 30px #ff6b9d;
-            transform: scale(1.05);
-        }
-
-        .header p {
-            color: #00ffff;
-            font-size: 0.9em;
-            text-shadow: 0 0 10px #00ffff;
-        }
-
         /* Info Panel */
         .info-panel {
             position: fixed;
@@ -324,50 +291,12 @@
             text-shadow: 0 0 10px #00ffff;
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .control-info {
+            font-size: 0.85em;
+            color: #00ff88;
             margin: 8px 0;
-            font-size: 0.9em;
         }
 
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            box-shadow: 0 0 10px;
-        }
-
-        /* Message Button */
-        .message-btn {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #ff6b9d, #ffd700);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            z-index: 100;
-            font-size: 1em;
-            box-shadow: 0 0 20px rgba(255, 107, 157, 0.6);
-            animation: messageBtnPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes messageBtnPulse {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.05); }
-        }
-
-        .message-btn:hover {
-            box-shadow: 0 0 30px rgba(255, 107, 157, 0.9);
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.5em;
@@ -387,32 +316,28 @@
             }
 
             .message-btn {
-                padding: 10px 20px;
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
                 font-size: 0.9em;
-            }
-
-            .love-message-box {
-                padding: 30px;
-                max-width: 90%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Aurora Background -->
-    <div class="aurora-bg"></div>
-    
-    <!-- Stars -->
-    <div class="stars" id="stars"></div>
-
-    <!-- Canvas -->
     <canvas id="canvas"></canvas>
+
+    <!-- Header -->
+    <div class="header" onclick="showLoveMessage()">
+        <h1>🪲 Aisyah's 3D Beetle World</h1>
+        <p>Realistic 3D Ecosystem Simulator</p>
+    </div>
 
     <!-- Message Button -->
     <button class="message-btn" onclick="showLoveMessage()">💌 Baca Pesan</button>
 
     <!-- Love Message Modal -->
-    <div class="love-message-overlay" id="loveMessageOverlay" style="display: none;">
+    <div class="love-message-overlay" id="loveMessageOverlay">
         <div class="love-message-box">
             <h2>💝 Pesan Untukmu</h2>
             <div class="from">Dari: Pandji ❤️</div>
@@ -422,76 +347,439 @@
         </div>
     </div>
 
-    <!-- Header -->
-    <div class="header" onclick="showLoveMessage()">
-        <h1>🪲 Aisyah's Beetle World</h1>
-        <p>Aurora Ecosystem Simulator</p>
-    </div>
-
     <!-- Info Panel -->
     <div class="info-panel">
-        <h3>🌍 Ecosystem Info</h3>
-        <div class="legend-item">
-            <div class="legend-color" style="background: #ff6b9d; box-shadow: 0 0 10px #ff6b9d;"></div>
-            <span>Leaf Beetle (Herbivore)</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background: #ffd700; box-shadow: 0 0 10px #ffd700;"></div>
-            <span>Stag Beetle (Carnivore)</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background: #00ff88; box-shadow: 0 0 10px #00ff88;"></div>
-            <span>Food</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background: #4ade80; box-shadow: 0 0 10px #4ade80;"></div>
-            <span>Plant</span>
-        </div>
+        <h3>🎮 Controls</h3>
+        <div class="control-info">🖱️ Drag = Rotate</div>
+        <div class="control-info">🔍 Scroll = Zoom</div>
+        <div class="control-info">🎯 Click = Follow</div>
+        <div class="control-info">⏸️ P = Pause</div>
     </div>
 
     <!-- UI Panel -->
     <div class="ui-panel">
         <h2>📊 Statistics</h2>
         <div class="stat-item">
-            <span class="stat-label">🪲 Total Beetles:</span>
-            <span class="stat-value" id="totalBeetles">0</span>
+            <span class="stat-label">🪲 Beetles:</span>
+            <span class="stat-value" id="beetleCount">50</span>
         </div>
         <div class="stat-item">
-            <span class="stat-label">🍃 Herbivores:</span>
-            <span class="stat-value" id="herbivores">0</span>
+            <span class="stat-label">🐦 Birds:</span>
+            <span class="stat-value" id="birdCount">10</span>
         </div>
         <div class="stat-item">
-            <span class="stat-label">🦅 Carnivores:</span>
-            <span class="stat-value" id="carnivores">0</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">🌿 Generation:</span>
-            <span class="stat-value" id="generation">1</span>
+            <span class="stat-label">🌿 Plants:</span>
+            <span class="stat-value" id="plantCount">30</span>
         </div>
         <div class="stat-item">
             <span class="stat-label">⏱️ Time:</span>
             <span class="stat-value" id="time">0s</span>
         </div>
         <div class="controls">
-            <button onclick="addBeetles('herbivore', 5)">+ Herbivore</button>
-            <button onclick="addBeetles('carnivore', 3)">+ Carnivore</button>
             <button onclick="togglePause()">⏸ Pause</button>
             <button onclick="resetSimulation()">🔄 Reset</button>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
+        // Scene Setup
         const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x0a0e27);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFShadowShadowMap;
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        camera.position.set(0, 50, 50);
+        camera.lookAt(0, 0, 0);
 
-        let isPaused = false;
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(100, 100, 50);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        directionalLight.shadow.camera.far = 500;
+        scene.add(directionalLight);
+
+        // Aurora Lights
+        const auroraLight1 = new THREE.PointLight(0x00ff88, 0.3, 200);
+        auroraLight1.position.set(100, 100, 0);
+        scene.add(auroraLight1);
+
+        const auroraLight2 = new THREE.PointLight(0x00ffff, 0.3, 200);
+        auroraLight2.position.set(-100, 100, 0);
+        scene.add(auroraLight2);
+
+        // Fog
+        scene.fog = new THREE.Fog(0x0a0e27, 200, 500);
+
+        // Aurora Sky
+        const skyGeometry = new THREE.SphereGeometry(400, 32, 32);
+        const skyMaterial = new THREE.MeshBasicMaterial({
+            color: 0x0a0e27,
+            side: THREE.BackSide
+        });
+        const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+        scene.add(sky);
+
+        // Stars
+        const starsGeometry = new THREE.BufferGeometry();
+        const starPositions = new Float32Array(1000 * 3);
+        for (let i = 0; i < starPositions.length; i += 3) {
+            starPositions[i] = (Math.random() - 0.5) * 800;
+            starPositions[i + 1] = (Math.random() - 0.5) * 800;
+            starPositions[i + 2] = (Math.random() - 0.5) * 800;
+        }
+        starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 2 });
+        const stars = new THREE.Points(starsGeometry, starsMaterial);
+        scene.add(stars);
+
+        // Ground
+        const groundGeometry = new THREE.PlaneGeometry(200, 200);
+        const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x2d5016, roughness: 0.8 });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Camera Controls
+        let cameraRotation = { x: 0, y: 0 };
+        let cameraDistance = 80;
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        document.addEventListener('mousedown', (e) => { isDragging = true; previousMousePosition = { x: e.clientX, y: e.clientY }; });
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+                cameraRotation.y += deltaX * 0.005;
+                cameraRotation.x += deltaY * 0.005;
+                cameraRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, cameraRotation.x));
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            }
+        });
+        document.addEventListener('mouseup', () => { isDragging = false; });
+        document.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            cameraDistance += e.deltaY * 0.05;
+            cameraDistance = Math.max(30, Math.min(200, cameraDistance));
+        });
+
+        // Beetle Class
+        class Beetle {
+            constructor() {
+                this.position = new THREE.Vector3((Math.random() - 0.5) * 100, 0.5, (Math.random() - 0.5) * 100);
+                this.velocity = new THREE.Vector3((Math.random() - 0.5) * 2, 0, (Math.random() - 0.5) * 2);
+                this.energy = 100;
+                this.age = 0;
+                this.direction = Math.random() * Math.PI * 2;
+                
+                // Create beetle mesh
+                this.group = new THREE.Group();
+                
+                // Body
+                const bodyGeometry = new THREE.CapsuleGeometry(0.3, 1, 4, 8);
+                const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xff6b9d, metalness: 0.3, roughness: 0.4 });
+                this.body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+                this.body.castShadow = true;
+                this.body.receiveShadow = true;
+                this.group.add(this.body);
+
+                // Head
+                const headGeometry = new THREE.SphereGeometry(0.25, 16, 16);
+                const headMaterial = new THREE.MeshStandardMaterial({ color: 0xff5588, metalness: 0.4, roughness: 0.3 });
+                this.head = new THREE.Mesh(headGeometry, headMaterial);
+                this.head.position.z = 0.6;
+                this.head.castShadow = true;
+                this.head.receiveShadow = true;
+                this.group.add(this.head);
+
+                // Antenna
+                const antennaGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.8, 8);
+                const antennaMaterial = new THREE.MeshStandardMaterial({ color: 0xff6b9d });
+                const antenna1 = new THREE.Mesh(antennaGeometry, antennaMaterial);
+                antenna1.position.set(-0.2, 0.1, 0.8);
+                antenna1.rotation.x = 0.3;
+                this.group.add(antenna1);
+
+                const antenna2 = new THREE.Mesh(antennaGeometry, antennaMaterial);
+                antenna2.position.set(0.2, 0.1, 0.8);
+                antenna2.rotation.x = 0.3;
+                this.group.add(antenna2);
+
+                // Legs
+                for (let i = 0; i < 3; i++) {
+                    const legGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.5, 8);
+                    const legMaterial = new THREE.MeshStandardMaterial({ color: 0xff5588 });
+                    const leg = new THREE.Mesh(legGeometry, legMaterial);
+                    leg.position.set(-0.3, -0.3, -0.2 + i * 0.5);
+                    leg.rotation.z = 0.5;
+                    this.group.add(leg);
+
+                    const leg2 = new THREE.Mesh(legGeometry, legMaterial);
+                    leg2.position.set(0.3, -0.3, -0.2 + i * 0.5);
+                    leg2.rotation.z = -0.5;
+                    this.group.add(leg2);
+                }
+
+                this.group.position.copy(this.position);
+                this.group.castShadow = true;
+                scene.add(this.group);
+            }
+
+            update() {
+                if (Math.random() < 0.02) {
+                    this.direction += (Math.random() - 0.5) * 0.5;
+                }
+
+                this.velocity.x = Math.cos(this.direction) * 1.5;
+                this.velocity.z = Math.sin(this.direction) * 1.5;
+
+                this.position.add(this.velocity);
+                this.energy -= 0.3;
+                this.age++;
+
+                // Wrap around
+                if (this.position.x < -100) this.position.x = 100;
+                if (this.position.x > 100) this.position.x = -100;
+                if (this.position.z < -100) this.position.z = 100;
+                if (this.position.z > 100) this.position.z = -100;
+
+                this.group.position.copy(this.position);
+                this.group.rotation.y = this.direction;
+            }
+
+            isAlive() {
+                return this.energy > 0 && this.age < 10000;
+            }
+
+            remove() {
+                scene.remove(this.group);
+            }
+        }
+
+        // Bird Class
+        class Bird {
+            constructor() {
+                this.position = new THREE.Vector3((Math.random() - 0.5) * 100, 30 + Math.random() * 40, (Math.random() - 0.5) * 100);
+                this.velocity = new THREE.Vector3((Math.random() - 0.5) * 3, (Math.random() - 0.5) * 1, (Math.random() - 0.5) * 3);
+                this.energy = 150;
+                this.age = 0;
+                this.direction = Math.random() * Math.PI * 2;
+                
+                this.group = new THREE.Group();
+
+                // Body
+                const bodyGeometry = new THREE.ConeGeometry(0.4, 1.5, 16);
+                const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.2, roughness: 0.5 });
+                this.body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+                this.body.castShadow = true;
+                this.body.receiveShadow = true;
+                this.group.add(this.body);
+
+                // Head
+                const headGeometry = new THREE.SphereGeometry(0.35, 16, 16);
+                const headMaterial = new THREE.MeshStandardMaterial({ color: 0xffed4e, metalness: 0.3, roughness: 0.4 });
+                this.head = new THREE.Mesh(headGeometry, headMaterial);
+                this.head.position.z = 0.8;
+                this.head.castShadow = true;
+                this.group.add(this.head);
+
+                // Eyes
+                const eyeGeometry = new THREE.SphereGeometry(0.1, 8, 8);
+                const eyeMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
+                const eye1 = new THREE.Mesh(eyeGeometry, eyeMaterial);
+                eye1.position.set(-0.15, 0.15, 1.1);
+                this.group.add(eye1);
+
+                const eye2 = new THREE.Mesh(eyeGeometry, eyeMaterial);
+                eye2.position.set(0.15, 0.15, 1.1);
+                this.group.add(eye2);
+
+                // Beak
+                const beakGeometry = new THREE.ConeGeometry(0.1, 0.4, 8);
+                const beakMaterial = new THREE.MeshStandardMaterial({ color: 0xff8800 });
+                const beak = new THREE.Mesh(beakGeometry, beakMaterial);
+                beak.position.z = 1.2;
+                beak.rotation.x = Math.PI / 2;
+                this.group.add(beak);
+
+                // Wings
+                const wingGeometry = new THREE.BoxGeometry(0.8, 0.2, 1.2);
+                const wingMaterial = new THREE.MeshStandardMaterial({ color: 0xffb700, metalness: 0.2 });
+                const wing1 = new THREE.Mesh(wingGeometry, wingMaterial);
+                wing1.position.set(-0.5, 0, 0);
+                wing1.castShadow = true;
+                this.group.add(wing1);
+
+                const wing2 = new THREE.Mesh(wingGeometry, wingMaterial);
+                wing2.position.set(0.5, 0, 0);
+                wing2.castShadow = true;
+                this.group.add(wing2);
+
+                this.group.position.copy(this.position);
+                this.group.castShadow = true;
+                scene.add(this.group);
+            }
+
+            update() {
+                if (Math.random() < 0.03) {
+                    this.direction += (Math.random() - 0.5) * 0.3;
+                    this.velocity.y += (Math.random() - 0.5) * 0.5;
+                }
+
+                this.velocity.x = Math.cos(this.direction) * 2.5;
+                this.velocity.z = Math.sin(this.direction) * 2.5;
+                this.velocity.y = Math.max(-2, Math.min(2, this.velocity.y));
+
+                this.position.add(this.velocity);
+                this.energy -= 0.5;
+                this.age++;
+
+                // Keep in bounds
+                if (this.position.y < 20) this.position.y = 20;
+                if (this.position.y > 80) this.position.y = 80;
+                if (this.position.x < -100) this.position.x = 100;
+                if (this.position.x > 100) this.position.x = -100;
+                if (this.position.z < -100) this.position.z = 100;
+                if (this.position.z > 100) this.position.z = -100;
+
+                this.group.position.copy(this.position);
+                this.group.rotation.y = this.direction;
+            }
+
+            isAlive() {
+                return this.energy > 0 && this.age < 10000;
+            }
+
+            remove() {
+                scene.remove(this.group);
+            }
+        }
+
+        // Plant Class
+        class Plant {
+            constructor() {
+                this.position = new THREE.Vector3((Math.random() - 0.5) * 100, 0, (Math.random() - 0.5) * 100);
+                
+                this.group = new THREE.Group();
+
+                // Stem
+                const stemGeometry = new THREE.CylinderGeometry(0.1, 0.15, 1.5, 8);
+                const stemMaterial = new THREE.MeshStandardMaterial({ color: 0x4ade80, roughness: 0.7 });
+                const stem = new THREE.Mesh(stemGeometry, stemMaterial);
+                stem.castShadow = true;
+                stem.receiveShadow = true;
+                this.group.add(stem);
+
+                // Leaves
+                for (let i = 0; i < 5; i++) {
+                    const leafGeometry = new THREE.BoxGeometry(0.4, 0.1, 0.8);
+                    const leafMaterial = new THREE.MeshStandardMaterial({ color: 0x2d5016, roughness: 0.8 });
+                    const leaf = new THREE.Mesh(leafGeometry, leafMaterial);
+                    leaf.position.y = -0.3 + i * 0.3;
+                    leaf.rotation.x = Math.random() * 0.5 - 0.25;
+                    leaf.rotation.z = Math.random() * Math.PI * 2;
+                    leaf.castShadow = true;
+                    this.group.add(leaf);
+                }
+
+                // Flower
+                const flowerGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+                const flowerMaterial = new THREE.MeshStandardMaterial({ color: 0xff6b9d, emissive: 0xff6b9d, emissiveIntensity: 0.2 });
+                const flower = new THREE.Mesh(flowerGeometry, flowerMaterial);
+                flower.position.y = 0.8;
+                flower.castShadow = true;
+                this.group.add(flower);
+
+                this.group.position.copy(this.position);
+                scene.add(this.group);
+            }
+
+            remove() {
+                scene.remove(this.group);
+            }
+        }
+
+        // Simulation
+        let beetles = [];
+        let birds = [];
+        let plants = [];
         let simulationTime = 0;
-        let generation = 1;
+        let isPaused = false;
+        let followTarget = null;
 
-        // Show Love Message
+        function initialize() {
+            for (let i = 0; i < 50; i++) {
+                beetles.push(new Beetle());
+            }
+            for (let i = 0; i < 10; i++) {
+                birds.push(new Bird());
+            }
+            for (let i = 0; i < 30; i++) {
+                plants.push(new Plant());
+            }
+        }
+
+        function update() {
+            if (isPaused) return;
+
+            simulationTime++;
+
+            beetles.forEach(beetle => beetle.update());
+            birds.forEach(bird => bird.update());
+
+            beetles = beetles.filter(b => {
+                if (!b.isAlive()) {
+                    b.remove();
+                    return false;
+                }
+                return true;
+            });
+
+            birds = birds.filter(b => {
+                if (!b.isAlive()) {
+                    b.remove();
+                    return false;
+                }
+                return true;
+            });
+
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('beetleCount').textContent = beetles.length;
+            document.getElementById('birdCount').textContent = birds.length;
+            document.getElementById('plantCount').textContent = plants.length;
+            document.getElementById('time').textContent = Math.floor(simulationTime / 60) + 's';
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+        }
+
+        function resetSimulation() {
+            beetles.forEach(b => b.remove());
+            birds.forEach(b => b.remove());
+            plants.forEach(p => p.remove());
+            beetles = [];
+            birds = [];
+            plants = [];
+            simulationTime = 0;
+            initialize();
+        }
+
         function showLoveMessage() {
             document.getElementById('loveMessageOverlay').style.display = 'flex';
         }
@@ -500,492 +788,64 @@
             document.getElementById('loveMessageOverlay').style.display = 'none';
         }
 
-        // Generate Stars
-        function generateStars() {
-            const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 200; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                starsContainer.appendChild(star);
-            }
-        }
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'p' || e.key === 'P') togglePause();
+        });
 
-        // Realistic Beetle Class
-        class Beetle {
-            constructor(x, y, type) {
-                this.x = x;
-                this.y = y;
-                this.type = type;
-                this.vx = (Math.random() - 0.5) * 2;
-                this.vy = (Math.random() - 0.5) * 2;
-                this.energy = 100;
-                this.age = 0;
-                this.size = type === 'herbivore' ? 6 : 8;
-                this.color = type === 'herbivore' ? '#ff6b9d' : '#ffd700';
-                this.direction = Math.random() * Math.PI * 2;
-                this.rotation = 0;
-                this.shadowLength = this.size * 1.5;
-            }
+        // Canvas click for following
+        canvas.addEventListener('click', (event) => {
+            if (event.target === canvas) {
+                const raycaster = new THREE.Raycaster();
+                const mouse = new THREE.Vector2();
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                raycaster.setFromCamera(mouse, camera);
 
-            update() {
-                // Smooth direction changes
-                if (Math.random() < 0.02) {
-                    this.direction += (Math.random() - 0.5) * 0.3;
-                }
+                const beetleObjects = beetles.map(b => b.body);
+                const birdObjects = birds.map(b => b.body);
+                const intersects = raycaster.intersectObjects([...beetleObjects, ...birdObjects]);
 
-                this.vx = Math.cos(this.direction) * 1.5;
-                this.vy = Math.sin(this.direction) * 1.5;
-
-                this.x += this.vx;
-                this.y += this.vy;
-                this.rotation += 0.05;
-
-                // Wrap around
-                if (this.x < 0) this.x = canvas.width;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.y < 0) this.y = canvas.height;
-                if (this.y > canvas.height) this.y = 0;
-
-                // Energy loss
-                this.energy -= this.type === 'carnivore' ? 0.5 : 0.3;
-                this.age++;
-            }
-
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
-
-                // Shadow
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-                ctx.beginPath();
-                ctx.ellipse(0, this.size * 0.8, this.size, this.size * 0.3, 0, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Body gradient
-                const bodyGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size);
-                bodyGradient.addColorStop(0, this.adjustBrightness(this.color, 1.2));
-                bodyGradient.addColorStop(0.7, this.color);
-                bodyGradient.addColorStop(1, this.adjustBrightness(this.color, 0.8));
-
-                // Main body
-                ctx.fillStyle = bodyGradient;
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 20;
-                ctx.beginPath();
-                ctx.ellipse(0, 0, this.size, this.size * 0.8, 0, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Head
-                ctx.fillStyle = this.adjustBrightness(this.color, 0.9);
-                ctx.beginPath();
-                ctx.arc(0, -this.size * 0.6, this.size * 0.6, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Eyes
-                ctx.fillStyle = '#00ffff';
-                ctx.beginPath();
-                ctx.arc(-this.size * 0.3, -this.size * 0.7, 2, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.arc(this.size * 0.3, -this.size * 0.7, 2, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Antenna
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = 1.5;
-                ctx.beginPath();
-                ctx.moveTo(-this.size * 0.3, -this.size * 0.8);
-                ctx.quadraticCurveTo(-this.size * 0.8, -this.size * 1.5, -this.size, -this.size * 1.2);
-                ctx.stroke();
-
-                ctx.beginPath();
-                ctx.moveTo(this.size * 0.3, -this.size * 0.8);
-                ctx.quadraticCurveTo(this.size * 0.8, -this.size * 1.5, this.size, -this.size * 1.2);
-                ctx.stroke();
-
-                // Legs detail
-                ctx.strokeStyle = this.adjustBrightness(this.color, 0.7);
-                ctx.lineWidth = 1;
-                for (let i = 0; i < 3; i++) {
-                    const legY = this.size * (0.2 - i * 0.4);
-                    ctx.beginPath();
-                    ctx.moveTo(-this.size * 0.4, legY);
-                    ctx.lineTo(-this.size * 0.8, legY + this.size * 0.3);
-                    ctx.stroke();
-
-                    ctx.beginPath();
-                    ctx.moveTo(this.size * 0.4, legY);
-                    ctx.lineTo(this.size * 0.8, legY + this.size * 0.3);
-                    ctx.stroke();
-                }
-
-                ctx.restore();
-                ctx.shadowBlur = 0;
-            }
-
-            adjustBrightness(color, factor) {
-                const hex = color.replace('#', '');
-                const num = parseInt(hex, 16);
-                const amt = Math.round(2.55 * factor);
-                const R = Math.min(255, (num >> 16) + amt);
-                const G = Math.min(255, (num >> 8 & 0x00FF) + amt);
-                const B = Math.min(255, (num & 0x0000FF) + amt);
-                return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-                    (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 + (B < 255 ? B < 1 ? 0 : B : 255))
-                    .toString(16).slice(1);
-            }
-
-            isAlive() {
-                return this.energy > 0 && this.age < 5000;
-            }
-        }
-
-        // Food Class
-        class Food {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = 4;
-                this.color = '#00ff88';
-                this.rotation = 0;
-            }
-
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
-
-                // Shadow
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-                ctx.beginPath();
-                ctx.ellipse(0, this.size * 0.6, this.size, this.size * 0.2, 0, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Glow
-                ctx.fillStyle = this.color;
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 15;
-                ctx.beginPath();
-                ctx.arc(0, 0, this.size, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.restore();
-                ctx.shadowBlur = 0;
-            }
-
-            update() {
-                this.rotation += 0.1;
-            }
-        }
-
-        // Plant Class
-        class Plant {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = 8;
-                this.color = '#4ade80';
-                this.energy = 50;
-                this.growth = 0;
-            }
-
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-
-                // Shadow
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-                ctx.beginPath();
-                ctx.ellipse(0, this.size * 1.2, this.size * 0.8, this.size * 0.3, 0, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Stem
-                ctx.strokeStyle = this.adjustBrightness(this.color, 0.8);
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.lineTo(0, this.size * 1.2);
-                ctx.stroke();
-
-                // Leaves
-                ctx.fillStyle = this.color;
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 15;
-
-                for (let i = 0; i < 5; i++) {
-                    const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
-                    ctx.save();
-                    ctx.translate(0, this.size * 0.3 * i);
-                    ctx.rotate(angle);
-                    ctx.beginPath();
-                    ctx.ellipse(this.size * 0.6, 0, this.size * 0.4, this.size * 0.2, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-                }
-
-                ctx.restore();
-                ctx.shadowBlur = 0;
-            }
-
-            adjustBrightness(color, factor) {
-                const hex = color.replace('#', '');
-                const num = parseInt(hex, 16);
-                const amt = Math.round(2.55 * factor);
-                const R = Math.min(255, (num >> 16) + amt);
-                const G = Math.min(255, (num >> 8 & 0x00FF) + amt);
-                const B = Math.min(255, (num & 0x0000FF) + amt);
-                return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-                    (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 + (B < 255 ? B < 1 ? 0 : B : 255))
-                    .toString(16).slice(1);
-            }
-        }
-
-        // Realistic Particle
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * 4;
-                this.vy = (Math.random() - 0.5) * 4 - 1;
-                this.color = color;
-                this.alpha = 1;
-                this.life = 40;
-                this.maxLife = 40;
-                this.size = Math.random() * 3 + 2;
-                this.rotation = Math.random() * Math.PI * 2;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.vy += 0.15;
-                this.vx *= 0.98;
-                this.alpha = this.life / this.maxLife;
-                this.life--;
-                this.rotation += 0.1;
-            }
-
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
-
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.alpha * 0.7;
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 10;
-                ctx.beginPath();
-                ctx.arc(0, 0, this.size, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.restore();
-                ctx.globalAlpha = 1;
-                ctx.shadowBlur = 0;
-            }
-
-            isAlive() {
-                return this.life > 0;
-            }
-        }
-
-        let beetles = [];
-        let food = [];
-        let plants = [];
-        let particles = [];
-
-        function initialize() {
-            generateStars();
-            
-            for (let i = 0; i < 10; i++) {
-                beetles.push(new Beetle(
-                    Math.random() * canvas.width,
-                    Math.random() * canvas.height,
-                    Math.random() > 0.6 ? 'carnivore' : 'herbivore'
-                ));
-            }
-
-            for (let i = 0; i < 15; i++) {
-                plants.push(new Plant(
-                    Math.random() * canvas.width,
-                    Math.random() * canvas.height
-                ));
-            }
-
-            for (let i = 0; i < 20; i++) {
-                food.push(new Food(
-                    Math.random() * canvas.width,
-                    Math.random() * canvas.height
-                ));
-            }
-        }
-
-        function addBeetles(type, count) {
-            for (let i = 0; i < count; i++) {
-                beetles.push(new Beetle(
-                    Math.random() * canvas.width,
-                    Math.random() * canvas.height,
-                    type
-                ));
-                createParticles(Math.random() * canvas.width, Math.random() * canvas.height, '#00ff88', 15);
-            }
-        }
-
-        function createParticles(x, y, color, count) {
-            for (let i = 0; i < count; i++) {
-                particles.push(new Particle(x, y, color));
-            }
-        }
-
-        function togglePause() {
-            isPaused = !isPaused;
-        }
-
-        function resetSimulation() {
-            beetles = [];
-            food = [];
-            plants = [];
-            particles = [];
-            simulationTime = 0;
-            generation = 1;
-            initialize();
-        }
-
-        function update() {
-            if (isPaused) return;
-
-            simulationTime++;
-
-            for (let i = beetles.length - 1; i >= 0; i--) {
-                beetles[i].update();
-
-                for (let j = food.length - 1; j >= 0; j--) {
-                    const dx = beetles[i].x - food[j].x;
-                    const dy = beetles[i].y - food[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < beetles[i].size + food[j].size) {
-                        beetles[i].energy += 30;
-                        createParticles(food[j].x, food[j].y, '#00ff88', 12);
-                        food.splice(j, 1);
-                        break;
-                    }
-                }
-
-                if (beetles[i].type === 'herbivore') {
-                    for (let j = plants.length - 1; j >= 0; j--) {
-                        const dx = beetles[i].x - plants[j].x;
-                        const dy = beetles[i].y - plants[j].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < beetles[i].size + plants[j].size) {
-                            beetles[i].energy += 20;
-                            createParticles(plants[j].x, plants[j].y, '#4ade80', 15);
-                            plants.splice(j, 1);
-
-                            setTimeout(() => {
-                                plants.push(new Plant(
-                                    Math.random() * canvas.width,
-                                    Math.random() * canvas.height
-                                ));
-                            }, 2000);
-                            break;
-                        }
-                    }
-                }
-
-                if (beetles[i].type === 'carnivore') {
-                    for (let j = beetles.length - 1; j >= 0; j--) {
-                        if (j !== i && beetles[j].type === 'herbivore') {
-                            const dx = beetles[i].x - beetles[j].x;
-                            const dy = beetles[i].y - beetles[j].y;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
-
-                            if (distance < beetles[i].size + beetles[j].size + 10) {
-                                beetles[i].energy += 50;
-                                createParticles(beetles[j].x, beetles[j].y, '#ff6b9d', 20);
-                                beetles.splice(j, 1);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (beetles[i].energy > 150 && Math.random() < 0.01) {
-                    beetles.push(new Beetle(
-                        beetles[i].x + (Math.random() - 0.5) * 20,
-                        beetles[i].y + (Math.random() - 0.5) * 20,
-                        beetles[i].type
-                    ));
-                    createParticles(beetles[i].x, beetles[i].y, beetles[i].color, 8);
-                    beetles[i].energy -= 50;
-                    generation++;
-                }
-
-                if (!beetles[i].isAlive()) {
-                    createParticles(beetles[i].x, beetles[i].y, '#ff0000', 12);
-                    beetles.splice(i, 1);
+                if (intersects.length > 0) {
+                    const clicked = intersects[0].object.parent;
+                    followTarget = clicked;
                 }
             }
+        });
 
-            for (let i = food.length - 1; i >= 0; i--) {
-                food[i].update();
-            }
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
 
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                if (!particles[i].isAlive()) {
-                    particles.splice(i, 1);
-                }
-            }
-
-            if (Math.random() < 0.05 && food.length < 30) {
-                food.push(new Food(
-                    Math.random() * canvas.width,
-                    Math.random() * canvas.height
-                ));
-            }
-
-            updateUI();
-        }
-
-        function updateUI() {
-            const herbivoreCount = beetles.filter(b => b.type === 'herbivore').length;
-            const carnivoreCount = beetles.filter(b => b.type === 'carnivore').length;
-
-            document.getElementById('totalBeetles').textContent = beetles.length;
-            document.getElementById('herbivores').textContent = herbivoreCount;
-            document.getElementById('carnivores').textContent = carnivoreCount;
-            document.getElementById('generation').textContent = generation;
-            document.getElementById('time').textContent = Math.floor(simulationTime / 60) + 's';
-        }
-
-        function draw() {
-            ctx.fillStyle = 'rgba(10, 14, 39, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            plants.forEach(plant => plant.draw());
-            food.forEach(f => f.draw());
-            beetles.forEach(beetle => beetle.draw());
-            particles.forEach(particle => particle.draw());
-        }
-
-        function gameLoop() {
             update();
-            draw();
-            requestAnimationFrame(gameLoop);
+
+            // Update camera position
+            const angle = Math.atan2(camera.position.x, camera.position.z);
+            camera.position.x = Math.sin(cameraRotation.y) * Math.cos(cameraRotation.x) * cameraDistance;
+            camera.position.y = Math.sin(cameraRotation.x) * cameraDistance + 20;
+            camera.position.z = Math.cos(cameraRotation.y) * Math.cos(cameraRotation.x) * cameraDistance;
+            
+            if (followTarget) {
+                camera.lookAt(followTarget.position);
+            } else {
+                camera.lookAt(0, 10, 0);
+            }
+
+            // Animate aurora lights
+            auroraLight1.position.x = Math.sin(simulationTime * 0.005) * 150;
+            auroraLight2.position.x = Math.cos(simulationTime * 0.005) * 150;
+
+            renderer.render(scene, camera);
         }
 
         window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
         initialize();
-        gameLoop();
+        animate();
     </script>
 </body>
 </html>
